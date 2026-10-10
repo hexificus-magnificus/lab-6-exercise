@@ -1,1 +1,24 @@
 Answer written questions here:
+
+1. starting from a low iteration count enables higher performance when the
+view has recently been changed, meaning that the user sees the results of
+their changes in closer to real-time. This is because mandelbrot makes up
+to maxIters iterations per call, and is called once per pixel - meaning
+the total number of mandelbrot iterations each frame can be up to
+windowHeight * windowWidth * maxIters, which tends to be very large.
+When the user stays on the same view for a while, it is ok to trade
+responsiveness for quality, since the user is likely to continue looking at
+the same view for a while.
+
+2. The program could maintain a thread used solely for mandelbrot calls,
+handling the window/view in another thread. The window/view does not take
+much processing, but is the main bottleneck for responsiveness, while the
+mandelbrot calls take the majority of processing power. The mandelbrot
+thread would fill a 2d pixel array for the window thread, which would then
+render whatever was in the array each frame.
+
+3. it would take much more processing power (4* the mandelbrot calls),
+but would act as a form of anti-aliasing, making the image look much
+smoother. This could maybe done in a similar way to the increasing
+iteration depth, gradually increasing the quality when it is more
+likely to be important.
